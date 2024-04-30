@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM lscr.io/linuxserver/code-server:latest
 # https://hub.docker.com/r/linuxserver/code-server/tags
-
+# https://go.dev/dl/
 COPY go-installer.sh /tmp/go-installer.sh
 
 ENV NODE_MAJOR=20

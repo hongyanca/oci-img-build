@@ -17,13 +17,15 @@ docker system prune --all --volumes --force
 dangling_volumes=$(docker volume ls -qf dangling=true)
 # If there are dangling volumes, remove them
 if [ ! -z "$dangling_volumes" ]; then
-    echo "Removing dangling Docker volumes..."
-    sudo docker volume rm $dangling_volumes
+	echo "Removing dangling Docker volumes..."
+	sudo docker volume rm $dangling_volumes
 else
-    echo "No dangling Docker volumes found."
+	echo "No dangling Docker volumes found."
 fi
 
-docker build -t awslabca/dev-container:latest -t awslabca/dev-container:`date "+%Y%m%d"`.1 . --push
+# docker build -t awslabca/dev-container:latest -t awslabca/dev-container:`date "+%Y%m%d"`.1 . --push
+docker build -t awslabca/dev-container:latest . --push
+docker build -t awslabca/dev-container:$(date "+%Y%m%d").1 . --push
 
 cd /apps/code-server
 /usr/bin/docker-compose pull
