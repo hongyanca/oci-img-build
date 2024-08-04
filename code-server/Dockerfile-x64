@@ -2,9 +2,7 @@
 FROM lscr.io/linuxserver/code-server:latest
 # https://hub.docker.com/r/linuxserver/code-server/tags
 # https://go.dev/dl/
-COPY go-installer.sh /tmp/go-installer.sh
-
-ENV NODE_MAJOR=20
+COPY go-installer-x64.sh /tmp/go-installer.sh
 
 RUN apt-get update \
   && apt-get install -y ca-certificates curl gnupg \
@@ -32,11 +30,13 @@ RUN apt-get update \
   && /bin/bash /tmp/go-installer.sh \
   # Install Rust inside Docker
   # https://users.rust-lang.org/t/compile-rust-app-for-a-docker-image/76369
-  && curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y \
+  # && curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y \
   # Install NeoVim
   && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz \
-  && sudo rm -rf /opt/nvim && sudo tar -C /opt -xzf nvim-linux64.tar.gz \
-  && sudo rm -rf /usr/bin/nvim && sudo ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim \
-  && rm nvim-linux64.tar.gz \
+  && rm -rf /opt/nvim && tar -C /opt -xzf nvim-linux64.tar.gz \
+  && rm -rf /usr/bin/nvim && ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim \
+  # Clean up
+  && rm -f /tmp/go-installer.sh /go*.tar.gz nvim-linux64.tar.gz \
+  && apt-get autoremove -y && apt-get clean \
   # Add user abc to sudoers
   && echo "abc ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers

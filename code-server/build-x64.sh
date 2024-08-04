@@ -7,7 +7,7 @@ sudo systemctl stop code-server.service
 docker stop code-server
 docker stop cloudflared-tunnel-code-server
 echo 'Removing dev-container image...'
-docker rmi -f awslabca/dev-container
+docker rmi -f awslabca/dev-container-x64
 docker rmi -f lscr.io/linuxserver/code-server
 
 echo 'Removing all unused data...'
@@ -24,8 +24,8 @@ else
 fi
 
 # docker build -t awslabca/dev-container:latest -t awslabca/dev-container:`date "+%Y%m%d"`.1 . --push
-docker build -t awslabca/dev-container:latest . --push
-docker build -t awslabca/dev-container:$(date "+%Y%m%d").1 . --push
+docker build -f Dockerfile-x64 -t awslabca/dev-container-x64:latest . --push
+docker build -f Dockerfile-x64 -t awslabca/dev-container-x64:$(date "+%Y%m%d").1 . --push
 
 cd /apps/code-server
 /usr/bin/docker-compose pull
