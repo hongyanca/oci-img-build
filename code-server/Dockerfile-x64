@@ -24,13 +24,8 @@ RUN apt-get update \
   python3-setuptools python3-setuptools-whl python3-wheel python3.10 \
   python3.10-dev python3.10-minimal python3.10-venv rpcsvc-proto xz-utils \
   zlib1g-dev zsh-common dnsutils iputils-ping htop jq \
-  && apt-get update && NEEDRESTART_MODE=a apt-get upgrade -y \
-  && apt-get autoremove -y && apt-get clean \
-  && curl https://pyenv.run | bash \
+  # Install Go
   && /bin/bash /tmp/go-installer.sh \
-  # Install Rust inside Docker
-  # https://users.rust-lang.org/t/compile-rust-app-for-a-docker-image/76369
-  # && curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y \
   # Install NeoVim
   && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz \
   && rm -rf /opt/nvim && tar -C /opt -xzf nvim-linux64.tar.gz \
