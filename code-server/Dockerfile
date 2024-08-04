@@ -7,10 +7,8 @@ COPY go-installer.sh /tmp/go-installer.sh
 ENV NODE_MAJOR=20
 
 RUN apt-get update \
-  && sudo apt-get install -y ca-certificates curl gnupg \
-  && sudo mkdir -p /etc/apt/keyrings \
-  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-  && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list \
+  && apt-get install -y ca-certificates curl gnupg \
+  && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs \
   && apt-get update && NEEDRESTART_MODE=a apt-get install -y make build-essential libssl-dev \
   libbz2-dev libreadline-dev libsqlite3-dev wget nodejs llvm libncurses5-dev \
   libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl \
@@ -42,4 +40,3 @@ RUN apt-get update \
   && rm nvim-linux64.tar.gz \
   # Add user abc to sudoers
   && echo "abc ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-
