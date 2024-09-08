@@ -4,8 +4,8 @@
 
 ## Define version and build
 ## Stable versions: https://go.dev/dl/
-VERSION=1.22
-BUILD=5
+VERSION=1.23
+BUILD=1
 
 ## Define package name
 PKG_NAME='go'
