@@ -23,7 +23,7 @@ else
 	echo "No dangling Docker volumes found."
 fi
 
-# docker build -t awslabca/dev-container:latest -t awslabca/dev-container:`date "+%Y%m%d"`.1 . --push
+# docker build --progress=plain -t awslabca/dev-container:latest -t awslabca/dev-container:$(date "+%Y%m%d").1 . 2>&1 | tee build.log
 docker build -f Dockerfile-x64 -t awslabca/dev-container-x64:latest . --push
 docker build -f Dockerfile-x64 -t awslabca/dev-container-x64:$(date "+%Y%m%d").1 . --push
 
