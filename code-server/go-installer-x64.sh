@@ -2,16 +2,32 @@
 
 #https://stackoverflow.com/questions/17480044/how-to-install-the-current-version-of-go-in-ubuntu-precise
 
-## Define version and build
-## Stable versions: https://go.dev/dl/
+## Define go official url
+GO_URL='https://go.dev/dl/'
+
+## Fetch stable versions of go
 VERSION=1.23
-BUILD=1
+BUILD=3
+# Download the Go language downloads page
+curl -o go-dev-dl.html $GO_URL
+# Extract lines after the word 'Stable'
+stable_info=$(grep -A4 'Stable' go-dev-dl.html)
+# Extract the content of the `id` property from the div tag with the matching pattern
+id_content=$(echo "$stable_info" | grep -oP 'id="\Kgo[0-9]+\.[0-9]+\.[0-9]+')
+# Parse the extracted content to separate VERSION and BUILD
+if [[ $id_content =~ go([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+	VERSION="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}"
+	BUILD="${BASH_REMATCH[3]}"
+else
+	echo "Unable to extract Go version information"
+	rm go-dev-dl.html
+	exit 1
+fi
+# Clean up
+rm go-dev-dl.html
 
 ## Define package name
 PKG_NAME='go'
-
-## Define go official url
-GO_URL='https://golang.org/dl/'
 
 ## Define local path
 LOCAL_PATH='/usr/local'
