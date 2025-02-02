@@ -6,7 +6,7 @@ COPY go-installer-arm.sh /tmp/go-installer.sh
 
 RUN apt-get update \
   && sudo apt-get install -y ca-certificates curl gnupg \
-  && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs \
+  && curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs \
   && apt-get update && NEEDRESTART_MODE=a DEBIAN_FRONTEND="noninteractive" \
   apt-get install -y make build-essential libssl-dev \
   libbz2-dev libreadline-dev libsqlite3-dev wget nodejs llvm libncurses5-dev \
@@ -27,15 +27,12 @@ RUN apt-get update \
   zlib1g-dev zsh-common dnsutils iputils-ping htop jq ninja-build gettext cmake unzip \
   # Install Go
   && /bin/bash /tmp/go-installer.sh \
+  # Install NeoVim
+  && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz \
+  && rm -rf /opt/nvim && tar -C /opt -xzf nvim-linux-arm64.tar.gz \
+  && rm -rf /usr/bin/nvim && ln -s /opt/nvim-linux-arm64/bin/nvim /usr/bin/nvim \
   # Clean up
   && rm -f /tmp/go-installer.sh /tmp/nvim-linux64.deb /go*.tar.gz \
   && apt-get autoremove -y && apt-get clean \
   # Add user abc to sudoers
   && echo "abc ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-
-# Install NeoVim
-RUN git clone --depth 1 --branch v0.10.1 https://github.com/neovim/neovim.git /tmp/neovim-aarch64 \
-  && cd /tmp/neovim-aarch64 \
-  && make CMAKE_BUILD_TYPE=Release \
-  && make install \
-  && rm -rf /tmp/neovim-aarch64

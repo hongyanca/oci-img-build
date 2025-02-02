@@ -7,7 +7,7 @@ GO_URL='https://go.dev/dl/'
 
 ## Fetch stable versions of go
 VERSION=1.23
-BUILD=3
+BUILD=5
 # Download the Go language downloads page
 curl -o go-dev-dl.html $GO_URL
 # Extract lines after the word 'Stable'

@@ -16,18 +16,18 @@ docker system prune --all --volumes --force
 # Check for dangling Docker volumes
 dangling_volumes=$(docker volume ls -qf dangling=true)
 # If there are dangling volumes, remove them
-if [ ! -z "$dangling_volumes" ]; then
-	echo "Removing dangling Docker volumes..."
-	sudo docker volume rm $dangling_volumes
+if [ -n "$dangling_volumes" ]; then
+  echo "Removing dangling Docker volumes..."
+  sudo docker volume rm "$dangling_volumes"
 else
-	echo "No dangling Docker volumes found."
+  echo "No dangling Docker volumes found."
 fi
 
 # docker build --progress=plain -t awslabca/dev-container:latest -t awslabca/dev-container:$(date "+%Y%m%d").1 . 2>&1 | tee build.log
 docker build -f Dockerfile-x64 -t awslabca/dev-container-x64:latest . --push
 docker build -f Dockerfile-x64 -t awslabca/dev-container-x64:$(date "+%Y%m%d").1 . --push
 
-cd /apps/code-server
+cd /apps/code-server || exit
 /usr/bin/docker-compose pull
 sudo docker builder prune --all --force
 sudo docker system prune --all --volumes --force

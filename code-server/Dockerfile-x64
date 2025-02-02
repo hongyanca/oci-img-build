@@ -6,7 +6,7 @@ COPY go-installer-x64.sh /tmp/go-installer.sh
 
 RUN apt-get update \
   && apt-get install -y ca-certificates curl gnupg \
-  && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs \
+  && curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs \
   && apt-get update && NEEDRESTART_MODE=a apt-get install -y make build-essential libssl-dev \
   libbz2-dev libreadline-dev libsqlite3-dev wget nodejs llvm libncurses5-dev \
   libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl \
@@ -19,7 +19,7 @@ RUN apt-get update \
   libmpfr6 libnsl-dev libpython3-dev libpython3-stdlib libpython3.12 \
   libpython3.12-dev libpython3.12-minimal libpython3.12-stdlib libquadmath0 \
   libstdc++-11-dev libtirpc-dev libtsan0 libubsan1 libuv1 libxml2 \
-  linux-libc-dev lto-disabled-list make media-types python3 \
+  linux-libc-dev lto-disabled-list make media-types python3 \ 
   python3-lib2to3 python3-minimal python3-pip-whl python3-pkg-resources \
   python3-setuptools python3-setuptools-whl python3-wheel python3.12 \
   python3.12-dev python3.12-minimal python3.12-venv rpcsvc-proto xz-utils \
@@ -27,11 +27,11 @@ RUN apt-get update \
   # Install Go
   && /bin/bash /tmp/go-installer.sh \
   # Install NeoVim
-  && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz \
-  && rm -rf /opt/nvim && tar -C /opt -xzf nvim-linux64.tar.gz \
-  && rm -rf /usr/bin/nvim && ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim \
+  && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz \
+  && rm -rf /opt/nvim && tar -C /opt -xzf nvim-linux-x86_64.tar.gz \
+  && rm -rf /usr/bin/nvim && ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/bin/nvim \
   # Clean up
-  && rm -f /tmp/go-installer.sh /go*.tar.gz nvim-linux64.tar.gz \
+  && rm -f /tmp/go-installer.sh /go*.tar.gz nvim-linux-x86_64.tar.gz \
   && apt-get autoremove -y && apt-get clean \
   # Add user abc to sudoers
   && echo "abc ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
